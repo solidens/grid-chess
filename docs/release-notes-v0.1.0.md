@@ -1,6 +1,19 @@
 Chess against a Maia network running entirely on the phone. No server, no API
 key, no `INTERNET` permission.
 
+<table>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/solidens/grid-chess/v0.1.0/docs/screenshots/01-levels.png" width="250" alt="Five difficulty levels, each a separate Maia network"></td>
+    <td><img src="https://raw.githubusercontent.com/solidens/grid-chess/v0.1.0/docs/screenshots/02-game.png" width="250" alt="A game in progress: the Scotch, 1.e4 e5 2.Nf3 Nc6 3.d4 exd4"></td>
+    <td><img src="https://raw.githubusercontent.com/solidens/grid-chess/v0.1.0/docs/screenshots/03-drag.png" width="250" alt="Dragging the light-squared bishop, its whole diagonal lit"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Five nets, not one throttled five ways</sub></td>
+    <td align="center"><sub>The Scotch, played by maia-1500</sub></td>
+    <td align="center"><sub>Drag or tap-tap, both work</sub></td>
+  </tr>
+</table>
+
 ### Which file do I want?
 
 **`grid-chess-0.1.0-arm64-v8a.apk`** — every phone made in roughly the last
