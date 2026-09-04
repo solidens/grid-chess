@@ -1,0 +1,5 @@
+First release.
+
+Five difficulty levels, each a separate Maia network rather than one engine
+throttled five ways. Play either colour, drag or tap to move, undo takes back
+your move and the reply together. Everything runs on the device.

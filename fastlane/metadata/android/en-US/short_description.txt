@@ -1,0 +1,1 @@
+Chess against a human-like neural network that runs entirely on your phone

@@ -1,0 +1,28 @@
+Chess against a neural network that runs entirely on your phone. No server, no
+account, no network permission — the app cannot talk to the internet at all.
+
+Five difficulty levels are five separate Maia networks, each trained only on
+games played by humans in one rating band: roughly 1100, 1300, 1500, 1700 and
+1900 Elo.
+
+That matters more than it sounds. A conventional engine playing badly plays
+badly in a way no human does — three brilliant moves, then a rook hung for no
+reason. Maia was trained to predict the move a human of that rating actually
+played, mistakes included, so its errors are the ones you recognise from your
+own games. There is no tree search at all: one pass through the network picks
+the move, in a few milliseconds, on any phone.
+
+The two strongest levels get a light safety check that rejects moves hanging a
+piece outright. The three weakest levels deliberately do not — hanging pieces is
+what chess at that rating looks like.
+
+Design is Bauhaus by way of neo-brutalism, and it goes all the way down to the
+pieces: the king is a cross, the queen an arch, the rook a square, the bishop a
+diamond, the knight a triangle, the pawn a circle. No lettering, no colour
+coding — the shape alone tells you what it is.
+
+Play either colour. Move by dragging a piece or by tapping it and then its
+destination. Undo takes back your move and the reply together.
+
+Maia is the work of CSSLab at the University of Toronto. This app packages it
+for Android; the research is theirs.
