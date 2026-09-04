@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,14 +32,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.github.bhlangonijr.chesslib.Piece
 import com.github.bhlangonijr.chesslib.PieceType
 import com.github.bhlangonijr.chesslib.Side
 import com.gridchess.game.GameViewModel
 import com.gridchess.game.Outcome
 import com.gridchess.ui.board.BoardRender
 import com.gridchess.ui.board.ChessBoard
+import com.gridchess.ui.board.drawPiece
 import com.gridchess.ui.theme.BrutalButton
 import com.gridchess.ui.theme.BrutalRule
 import com.gridchess.ui.theme.BrutalSlab
@@ -123,6 +128,7 @@ fun GameScreen(viewModel: GameViewModel, onExit: () -> Unit) {
 
         state.promotion?.let {
             PromotionOverlay(
+                side = state.playerSide,
                 onPick = viewModel::completePromotion,
                 onCancel = viewModel::cancelPromotion,
             )
@@ -217,7 +223,11 @@ private fun StatusBar(
 }
 
 @Composable
-private fun PromotionOverlay(onPick: (PieceType) -> Unit, onCancel: () -> Unit) {
+private fun PromotionOverlay(
+    side: Side,
+    onPick: (PieceType) -> Unit,
+    onCancel: () -> Unit,
+) {
     Box(
         Modifier
             .fillMaxSize()
@@ -229,33 +239,35 @@ private fun PromotionOverlay(onPick: (PieceType) -> Unit, onCancel: () -> Unit) 
             modifier = Modifier
                 .padding(GridTokens.Page)
                 .fillMaxWidth()
-                .height(190.dp),
+                .height(150.dp),
             fill = Grid.Paper,
             contentPadding = PaddingValues(GridTokens.GapWide),
         ) {
-            Column(Modifier.fillMaxSize()) {
+            Column(Modifier.fillMaxWidth()) {
                 Caption("Promote to")
-                Spacer(Modifier.height(GridTokens.GapWide))
+                Spacer(Modifier.height(GridTokens.Gap))
                 Row(horizontalArrangement = Arrangement.spacedBy(GridTokens.Gap)) {
+                    // The real glyphs, not letters. The rest of the app refuses to
+                    // name pieces in text; this screen has no business doing it.
                     listOf(
-                        PieceType.QUEEN to "Q",
-                        PieceType.ROOK to "R",
-                        PieceType.BISHOP to "B",
-                        PieceType.KNIGHT to "N",
-                    ).forEach { (type, glyph) ->
-                        Box(Modifier.weight(1f).height(88.dp)) {
+                        PieceType.QUEEN, PieceType.ROOK,
+                        PieceType.BISHOP, PieceType.KNIGHT,
+                    ).forEach { type ->
+                        Box(Modifier.weight(1f).height(72.dp)) {
                             BrutalSlab(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .clickable { onPick(type) },
                                 shadow = GridTokens.ShadowSmall,
                             ) {
-                                Text(
-                                    glyph,
-                                    style = MaterialTheme.typography.displayMedium,
-                                    color = Grid.Ink,
-                                    modifier = Modifier.align(Alignment.Center),
-                                )
+                                Canvas(Modifier.fillMaxSize()) {
+                                    drawPiece(
+                                        Piece.make(side, type),
+                                        Rect(Offset.Zero, size),
+                                        Grid.Ink,
+                                        Grid.Paper,
+                                    )
+                                }
                             }
                         }
                     }

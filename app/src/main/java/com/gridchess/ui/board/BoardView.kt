@@ -181,7 +181,7 @@ fun ChessBoard(
                     val piece = render.pieces.getOrNull(square.ordinal) ?: Piece.NONE
                     // The piece in hand is drawn at the pointer, not on its square.
                     if (piece != Piece.NONE && square != dragFrom) {
-                        drawPiece(piece, rect, Grid.Ink, Grid.Paper, strokePx)
+                        drawPiece(piece, rect, Grid.Ink, Grid.Paper)
                     }
 
                     // Legal targets. A dot on an empty square, a ring around an
@@ -229,7 +229,6 @@ fun ChessBoard(
                         Rect(center = dragAt, radius = cell * 1.15f / 2f),
                         Grid.Ink,
                         Grid.Paper,
-                        strokePx,
                     )
                 }
             }

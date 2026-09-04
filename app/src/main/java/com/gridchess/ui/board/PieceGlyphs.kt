@@ -18,6 +18,17 @@ import com.github.bhlangonijr.chesslib.PieceType
  * lettering -- so the six shapes are deliberately maximally distinct, and
  * scale ranks them: king and queen read biggest, pawn smallest.
  */
+/**
+ * Outline weight as a fraction of the cell, not an absolute width.
+ *
+ * The glyphs are drawn at three different sizes -- on the board, enlarged in the
+ * hand while dragging, and larger still in the promotion picker -- and a fixed
+ * stroke made the big ones read as a thinner, different drawing. Deriving it
+ * from the cell keeps one glyph at every size. The value is the ratio the board
+ * already used, so the board itself is unchanged.
+ */
+private const val STROKE_RATIO = 0.055f
+
 private val Scale = mapOf(
     PieceType.KING to 0.72f,
     PieceType.QUEEN to 0.68f,
@@ -32,7 +43,6 @@ fun DrawScope.drawPiece(
     cell: Rect,
     ink: Color,
     paper: Color,
-    strokePx: Float,
 ) {
     val type = piece.pieceType ?: return
     val isWhite = piece.pieceSide == com.github.bhlangonijr.chesslib.Side.WHITE
@@ -42,7 +52,8 @@ fun DrawScope.drawPiece(
     val body = if (isWhite) paper else ink
     val outline = ink
 
-    val extent = minOf(cell.width, cell.height) * (Scale[type] ?: 0.5f)
+    val span = minOf(cell.width, cell.height)
+    val extent = span * (Scale[type] ?: 0.5f)
     val box = Rect(
         center = cell.center,
         radius = extent / 2f,
@@ -59,7 +70,7 @@ fun DrawScope.drawPiece(
     }
 
     drawPath(path, color = body, style = Fill)
-    drawPath(path, color = outline, style = Stroke(width = strokePx))
+    drawPath(path, color = outline, style = Stroke(width = span * STROKE_RATIO))
 }
 
 private fun circlePath(b: Rect) = Path().apply { addOval(b) }
