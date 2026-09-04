@@ -1,0 +1,8 @@
+The promotion picker showed the letters Q R B N. It now draws the same shapes
+the board does — arch, square, diamond, triangle — because pieces in this app
+are shapes and nothing else.
+
+Fixing that exposed a second thing: outline weight was a fixed width while the
+pieces are drawn at three sizes, so the larger ones read as a thinner, different
+drawing. The outline now scales with the piece. Most visible on the piece you
+are holding mid-drag.

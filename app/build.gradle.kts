@@ -22,8 +22,8 @@ android {
         applicationId = "com.gridchess"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // ONNX Runtime ships x86/x86_64 for emulators and arm for devices.
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
