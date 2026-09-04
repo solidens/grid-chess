@@ -1,0 +1,40 @@
+GRID CHESS
+Copyright (C) 2026 solodkovskiy
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version. See LICENSE for the full text.
+
+The project is GPL-3 because the released APK embeds the Maia networks, which
+are GPL-3. That licence propagates to the whole binary, so the source is
+licensed to match rather than claiming a permissiveness the distributed
+artefact cannot have.
+
+
+THIRD-PARTY COMPONENTS
+======================
+
+Maia networks (maia-1100 / 1300 / 1500 / 1700 / 1900)
+  CSSLab, University of Toronto -- https://github.com/CSSLab/maia-chess
+  GPL-3.0. Weights are fetched by tools/export_maia.py, not vendored in this
+  repository, and are embedded in the released APK.
+
+  Reference: McIlroy-Young, Sen, Kleinberg, Anderson. "Aligning Superhuman AI
+  with Human Behavior: Chess as a Model System." KDD 2020.
+
+Leela Chess Zero (lc0)
+  https://github.com/LeelaChessZero/lc0 -- GPL-3.0
+  Used at build time only, via its `leela2onnx` mode, to convert the Maia
+  weights to ONNX. Not linked into the app.
+
+chesslib
+  Ben-Hur Carlos Vieira Langoni Junior -- https://github.com/bhlangonijr/chesslib
+  Apache-2.0. Move generation, FEN parsing, board representation.
+
+ONNX Runtime
+  Microsoft -- https://github.com/microsoft/onnxruntime
+  MIT. On-device inference.
+
+Jetpack Compose, AndroidX
+  Google -- Apache-2.0.
