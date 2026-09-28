@@ -25,10 +25,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 private val Sharp = RoundedCornerShape(0.dp)
+
+/** Fills darker than this get the paper inline; Ink is 0.006, the primaries start at 0.09. */
+private const val DARK_FILL = 0.05f
+private val INLINE = 2.dp
 
 /**
  * The one primitive the rest of the UI is built from: a flat slab with a hard
@@ -65,6 +70,18 @@ fun BrutalSlab(
                 .offset(x = pressedDepth, y = pressedDepth)
                 .background(fill, Sharp)
                 .border(BorderStroke(borderWidth, border), Sharp)
+                .then(
+                    // An ink slab on an ink shadow reads as one black blob. A paper
+                    // line just inside the border splits the body from its shadow;
+                    // keeping the outer edge ink keeps it aligned with its neighbours.
+                    if (fill.luminance() < DARK_FILL) {
+                        Modifier
+                            .padding(borderWidth)
+                            .border(BorderStroke(INLINE, Grid.Paper), Sharp)
+                    } else {
+                        Modifier
+                    },
+                )
                 .padding(contentPadding),
             content = content,
         )

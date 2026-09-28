@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -46,66 +47,77 @@ fun HomeScreen(onStart: (Difficulty, Side) -> Unit) {
     var difficulty by remember { mutableStateOf(Difficulty.THREE) }
     var side by remember { mutableStateOf(Side.WHITE) }
 
+    // Start is pinned to the bottom edge; only the choices above it scroll. On a
+    // tall phone nothing scrolls at all, on a small one the button never hides.
     Column(
         Modifier
             .fillMaxSize()
             .background(Grid.Paper)
             .statusBarsPadding()
-            .verticalScroll(rememberScrollState())
-            .padding(GridTokens.Page)
-            .padding(top = GridTokens.GapWide),
+            .navigationBarsPadding(),
     ) {
-        Text(
-            "GRID",
-            style = MaterialTheme.typography.displayLarge,
-            color = Grid.Ink,
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(
+            Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = GridTokens.Page)
+                .padding(top = GridTokens.GapWide),
+        ) {
             Text(
-                "CHESS",
+                "GRID",
                 style = MaterialTheme.typography.displayLarge,
-                color = Grid.Red,
+                color = Grid.Ink,
             )
-            Spacer(Modifier.width(GridTokens.GapWide))
-            ColorChip(Grid.Yellow, size = 20.dp)
-            Spacer(Modifier.width(6.dp))
-            ColorChip(Grid.Blue, size = 20.dp)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "CHESS",
+                    style = MaterialTheme.typography.displayLarge,
+                    color = Grid.Red,
+                )
+                Spacer(Modifier.width(GridTokens.GapWide))
+                ColorChip(Grid.Yellow, size = 20.dp)
+                Spacer(Modifier.width(6.dp))
+                ColorChip(Grid.Blue, size = 20.dp)
+            }
+
+            Spacer(Modifier.height(GridTokens.Gap))
+            BrutalRule()
+            Spacer(Modifier.height(GridTokens.Gap))
+            Caption("Local neural opponent · no network required")
+
+            Spacer(Modifier.height(GridTokens.GapSection))
+            Caption("Opponent")
+            Spacer(Modifier.height(GridTokens.Gap))
+
+            Difficulty.entries.forEach { level ->
+                LevelRow(
+                    level = level,
+                    selected = level == difficulty,
+                    onSelect = { difficulty = level },
+                )
+                Spacer(Modifier.height(GridTokens.Gap))
+            }
+
+            Spacer(Modifier.height(GridTokens.Gap))
+            Caption("You play")
+            Spacer(Modifier.height(GridTokens.Gap))
+            Row(horizontalArrangement = Arrangement.spacedBy(GridTokens.GapWide)) {
+                SideChoice("White", side == Side.WHITE, Modifier.weight(1f)) { side = Side.WHITE }
+                SideChoice("Black", side == Side.BLACK, Modifier.weight(1f)) { side = Side.BLACK }
+            }
+            Spacer(Modifier.height(GridTokens.GapWide))
         }
 
-        Spacer(Modifier.height(GridTokens.Gap))
         BrutalRule()
-        Spacer(Modifier.height(GridTokens.Gap))
-        Caption("Local neural opponent · no network required")
-
-        Spacer(Modifier.height(GridTokens.GapSection))
-        Caption("Opponent")
-        Spacer(Modifier.height(GridTokens.Gap))
-
-        Difficulty.entries.forEach { level ->
-            LevelRow(
-                level = level,
-                selected = level == difficulty,
-                onSelect = { difficulty = level },
-            )
-            Spacer(Modifier.height(GridTokens.Gap + GridTokens.ShadowSmall))
-        }
-
-        Spacer(Modifier.height(GridTokens.GapWide))
-        Caption("You play")
-        Spacer(Modifier.height(GridTokens.Gap))
-        Row(horizontalArrangement = Arrangement.spacedBy(GridTokens.GapWide)) {
-            SideChoice("White", side == Side.WHITE, Modifier.weight(1f)) { side = Side.WHITE }
-            SideChoice("Black", side == Side.BLACK, Modifier.weight(1f)) { side = Side.BLACK }
-        }
-
-        Spacer(Modifier.height(GridTokens.GapSection))
         BrutalButton(
             label = "Start",
             onClick = { onStart(difficulty, side) },
             fill = Grid.Yellow,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = GridTokens.Page)
+                .padding(top = GridTokens.GapWide, bottom = GridTokens.Gap),
         )
-        Spacer(Modifier.height(GridTokens.GapSection))
     }
 }
 
@@ -120,12 +132,12 @@ private fun LevelRow(
     Box(
         Modifier
             .fillMaxWidth()
-            .height(72.dp),
+            .height(ROW_HEIGHT + GridTokens.ShadowSmall),
     ) {
         BrutalSlab(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(72.dp)
+                .height(ROW_HEIGHT)
                 .clickable(onClick = onSelect),
             fill = if (selected) accent else Grid.Paper,
             shadow = GridTokens.ShadowSmall,
@@ -133,7 +145,9 @@ private fun LevelRow(
             contentPadding = PaddingValues(horizontal = GridTokens.GapWide),
         ) {
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterStart),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -220,3 +234,5 @@ private fun SideChoice(
         }
     }
 }
+
+private val ROW_HEIGHT = 60.dp
