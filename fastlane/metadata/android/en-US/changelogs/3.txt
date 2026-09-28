@@ -1,0 +1,3 @@
+The Start button is pinned to the bottom of the home screen, so small phones no longer scroll to reach it.
+
+Black buttons get a white inner line, so they no longer merge with their black shadow.
