@@ -130,7 +130,7 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
     private fun onServer(msg: ServerMsg) {
         when (msg) {
             is ServerMsg.Seat -> {
-                _state.value = _state.value.copy(playerSide = msg.color.side)
+                msg.color?.let { _state.value = _state.value.copy(playerSide = it.side) }
                 editOnline { it.copy(code = msg.code, seated = true) }
             }
             is ServerMsg.State -> sync(msg)
@@ -157,7 +157,7 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
         val over = msg.status == Status.OVER
         val s = _state.value
         _state.value = s.copy(
-            playerSide = msg.color.side,
+            playerSide = msg.color?.side ?: s.playerSide,
             selected = if (over) null else s.selected,
             targets = if (over) emptySet() else s.targets,
             outcome = when {
