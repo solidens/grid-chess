@@ -7,6 +7,8 @@ activityCompose = "1.9.3"
 composeBom = "2024.10.01"
 onnxruntime = "1.19.2"
 chesslib = "1.3.4"
+okhttp = "4.12.0"
+serialization = "1.7.3"
 junit = "4.13.2"
 androidxJunit = "1.2.1"
 
@@ -25,6 +27,8 @@ androidx-foundation = { group = "androidx.compose.foundation", name = "foundatio
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 onnxruntime-android = { group = "com.microsoft.onnxruntime", name = "onnxruntime-android", version.ref = "onnxruntime" }
 chesslib = { group = "com.github.bhlangonijr", name = "chesslib", version.ref = "chesslib" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunit" }
 
@@ -32,3 +36,4 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "a
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

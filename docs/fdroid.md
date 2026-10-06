@@ -8,8 +8,9 @@ not re-derived later.
 Dependencies are clean. F-Droid's [inclusion policy](https://f-droid.org/docs/Inclusion_Policy/)
 explicitly permits prebuilt artefacts from Maven Central, Google Maven and
 JitPack, which covers ONNX Runtime (MIT) and chesslib (Apache-2.0, JitPack).
-Everything in the tree is FLOSS, there is no analytics or ad SDK, and the app
-holds no permissions at all.
+Everything in the tree is FLOSS and there is no analytics or ad SDK. Since
+online play the app holds `INTERNET`, and the game server is closed source:
+expect F-Droid's NonFreeNet anti-feature on it.
 
 `fastlane/metadata/android/en-US/` holds the title, descriptions, changelog,
 icon and screenshots in the layout F-Droid reads from the app repository.

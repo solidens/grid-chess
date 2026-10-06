@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 // Signing credentials live outside the repository. When they are absent -- a
@@ -27,6 +28,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // ONNX Runtime ships x86/x86_64 for emulators and arm for devices.
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
+
+        // Where online play lives, and where a key is bought. Set in
+        // gradle.properties; an empty server URL hides online play altogether.
+        buildConfigField("String", "ONLINE_URL", "\"${providers.gradleProperty("grid.online.url").getOrElse("")}\"")
+        buildConfigField("String", "GUMROAD_URL", "\"${providers.gradleProperty("grid.gumroad.url").getOrElse("")}\"")
     }
 
     signingConfigs {
@@ -42,6 +48,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // The emulator's name for the laptop it runs on, where the server is started by hand.
+            buildConfigField("String", "ONLINE_URL", "\"ws://10.0.2.2:8080/play\"")
+        }
         release {
             signingConfig = signingConfigs.getByName("release")
                 .takeIf { keystoreProperties.getProperty("storeFile") != null }
@@ -57,7 +67,10 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
 
-    buildFeatures { compose = true }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 
     androidResources {
         // The .onnx nets are already compressed; keep them uncompressed so
@@ -98,6 +111,8 @@ dependencies {
 
     implementation(libs.chesslib)
     implementation(libs.onnxruntime.android)
+    implementation(libs.okhttp)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

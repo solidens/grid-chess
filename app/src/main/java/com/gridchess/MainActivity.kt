@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.bhlangonijr.chesslib.Side
 import com.gridchess.game.GameViewModel
@@ -23,6 +25,8 @@ class MainActivity : ComponentActivity() {
             GridChessTheme {
                 val vm: GameViewModel = viewModel()
                 var inGame by remember { mutableStateOf(false) }
+                // Held here, not on the home screen, so coming back from a game keeps the choice.
+                var vsFriend by rememberSaveable { mutableStateOf(false) }
 
                 if (inGame) {
                     GameScreen(
@@ -30,11 +34,25 @@ class MainActivity : ComponentActivity() {
                         onExit = { inGame = false },
                     )
                 } else {
+                    val license by vm.license.collectAsStateWithLifecycle()
                     HomeScreen(
+                        onlineAvailable = vm.onlineAvailable,
+                        license = license,
+                        onLicense = vm::setLicense,
                         onStart = { difficulty, side: Side ->
                             vm.newGame(difficulty, side)
                             inGame = true
                         },
+                        onHost = { side ->
+                            vm.host(side)
+                            inGame = true
+                        },
+                        onJoin = { code ->
+                            vm.join(code)
+                            inGame = true
+                        },
+                        vsFriend = vsFriend,
+                        onVsFriend = { vsFriend = it },
                     )
                 }
             }
